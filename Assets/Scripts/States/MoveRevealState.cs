@@ -5,28 +5,30 @@
     MoveRevealPanel panel;
     public override void EnterState()
     {
-        var model = GameManager.Instance.Model;
-        var lastRound = model.GetLastRound();
-        var p1selection = model.GetMoveSO(lastRound.PlayerMove);
-        var p2selection = model.GetMoveSO(lastRound.Player2Move);
+        var model = Model.Instance;
+        var lastRound = model.Match.GetLastRound();
+        var p1selection = model.GetMove(lastRound.PlayerMove);
+        var p2selection = model.GetMove(lastRound.Player2Move);
 
         panel = UIManager.Instance.ShowPanel<MoveRevealPanel>();
-        panel.SetUp(model.Players[0].Name,model.Players[1].Name, lastRound.Result, p1selection, p2selection);
+        panel.SetUp(model.Players[0].Name, model.Players[1].Name, lastRound.Result, p1selection, p2selection);
         panel.StartCountdown(countdownTime);
         panel.OnRevealed += UpdateCounter;
         panel.OnContinue += EndRound;
+        panel.OnResetMatch += ResetMatch;
+        panel.OnExitMatch += ExitMatch;
     }
 
     private void UpdateCounter()
     {
-        var players = GameManager.Instance.Model.Players;
+        var players = Model.Instance.Players;
         var panel = UIManager.Instance.ShowPanel<RoundCounterPanel>();
         panel.AddResult(players[0].Wins, players[1].Wins);
     }
 
-    public void EndRound()
+    private void EndRound()
     {
-        if (GameManager.Instance.Model.MatchEnded())
+        if (Model.Instance.Match.MatchEnded())
         {
             GameManager.Instance.ChangeState(new MatchFinishState());
         }
@@ -36,8 +38,22 @@
         }
     }
 
+    private void ResetMatch()
+    {
+        UIManager.Instance.HidePanel<RoundCounterPanel>();
+        GameManager.Instance.ChangeState(new MatchStartState());
+    }
+
+    private void ExitMatch()
+    {
+        UIManager.Instance.HidePanel<RoundCounterPanel>();
+        GameManager.Instance.ChangeState(new MainMenuState());
+    }
+
     public override void ExitState()
     {
+        panel.OnExitMatch -= ExitMatch;
+        panel.OnResetMatch -= ResetMatch;
         panel.OnRevealed -= UpdateCounter;
         panel.OnContinue -= EndRound;
         UIManager.Instance.HidePanel<MoveRevealPanel>();

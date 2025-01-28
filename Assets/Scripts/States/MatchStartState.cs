@@ -1,15 +1,15 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class MatchStartState : State
 {
     public override void EnterState()
     {
-        //Initialize match
-        GameManager.Instance.Model.AddPlayer("Player");
-        GameManager.Instance.Model.AddPlayer("CPU");
-        GameManager.Instance.Model.StartMatch();
+        // Initialize match
+        Model.Instance.ResetPlayers();
+        Model.Instance.AddPlayer("Player");
+        Model.Instance.AddPlayer("CPU");
+        Model.Instance.StartMatch();
 
         GameManager.Instance.StartCoroutine(StartMatchMessage());
     }
@@ -25,6 +25,6 @@ public class MatchStartState : State
     {
         UIManager.Instance.HidePanel<MessagePanel>();
         var panel = UIManager.Instance.ShowPanel<RoundCounterPanel>();
-        panel.ResetCount();
+        panel.ResetCount(Model.Instance.Match.MaxRounds);
     }
 }

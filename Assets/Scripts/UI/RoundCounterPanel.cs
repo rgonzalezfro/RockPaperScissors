@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,11 @@ public class RoundCounterPanel : UIPanel
     [SerializeField]
     private Color loseColor;
     [SerializeField]
-    private Image[] images;
+    private Transform imageContainer;
+    [SerializeField]
+    private Image imagePrefab;
+
+    private List<Image> images;
 
     int win;
     int lose;
@@ -18,11 +23,25 @@ public class RoundCounterPanel : UIPanel
 
     int maxRounds = 5;
 
-    public void ResetCount()
+    public void ResetCount(int maxRounds)
     {
+        this.maxRounds = maxRounds;
+
+        GameManager.Instance.ClearChildren(imageContainer);
+        CreateCounter(maxRounds);
+
         foreach (var image in images)
         {
             image.color = neutralColor;
+        }
+    }
+
+    private void CreateCounter(int maxRounds)
+    {
+        images = new List<Image>();
+        for (int i = 0; i < maxRounds; i++)
+        {
+            images.Add(Instantiate(imagePrefab, imageContainer));
         }
     }
 
@@ -31,15 +50,6 @@ public class RoundCounterPanel : UIPanel
         this.win = win;
         this.lose = lost;
         this.neutral = maxRounds - win - lose;
-
-        //if (result == Result.Win)
-        //{
-        //    newIndex = win - 1;
-        //}
-        //else if (result == Result.Lose)
-        //{
-        //    newIndex = win + neutral;
-        //}
 
         UpdateScore();
     }

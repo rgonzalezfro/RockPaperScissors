@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -20,9 +19,12 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region State Manager (move to other class for Single responsibility)
-
     private State currentState;
+
+    private void Start()
+    {
+        ChangeState(new MainMenuState());
+    }
 
     public void ChangeState(State newState)
     {
@@ -31,9 +33,7 @@ public class GameManager : MonoBehaviour
         currentState.EnterState();
     }
 
-    #endregion
-
-    #region Logs utility
+    #region Utility
 
     public void Log(string log)
     {
@@ -45,20 +45,13 @@ public class GameManager : MonoBehaviour
         Debug.LogError(log);
     }
 
-    #endregion
-
-    public MatchModel Model;
-
-    //Add settings as scriptable objects
-
-    [SerializeField]
-    private List<MoveSO> Moves;
-
-    private void Start()
+    public void ClearChildren(Transform container)
     {
-        Model = new MatchModel();
-        Model.LoadMoves(Moves);
-
-        ChangeState(new MainMenuState());
+        for (int i = 0; i < container.childCount; i++)
+        {
+            Destroy(container.GetChild(i).gameObject);
+        }
     }
+
+    #endregion
 }

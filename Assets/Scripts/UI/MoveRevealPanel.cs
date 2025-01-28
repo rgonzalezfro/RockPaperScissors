@@ -27,6 +27,8 @@ public class MoveRevealPanel : UIPanel
 
     public event Action OnRevealed;
     public event Action OnContinue;
+    public event Action OnResetMatch;
+    public event Action OnExitMatch;
 
     public void SetUp(string player1, string player2, Result result, MoveSO p1selection, MoveSO p2selection)
     {
@@ -49,6 +51,16 @@ public class MoveRevealPanel : UIPanel
     public void Continue()
     {
         OnContinue?.Invoke();
+    }
+
+    public void ResetMatch()
+    {
+        OnResetMatch?.Invoke();
+    }
+
+    public void OnExit()
+    {
+        OnExitMatch?.Invoke();
     }
 
     private IEnumerator CountdownCoroutine(int seconds)

@@ -1,95 +1,66 @@
 using System.Collections.Generic;
-using System.Linq;
 
 public class MatchModel
 {
-    public int RequiredWins = 3;
+    private int requiredWins;
+    private int maxRounds;
+    private Dictionary<Move, MoveSO> moves;
+    private List<PlayerModel> players = new List<PlayerModel>();
+    private List<RoundModel> rounds = new List<RoundModel>();
+    private AIModel AIModel;
 
-    public Dictionary<Move, MoveSO> Moves;
-    public List<PlayerModel> Players = new List<PlayerModel>();
-    private List<RoundModel> Rounds = new List<RoundModel>();
+    public int MaxRounds => maxRounds;
 
-    public MatchModel()
+    public MatchModel(List<PlayerModel> players, Dictionary<Move, MoveSO> moves, int requiredWins, AIModel aiModel)
     {
-        //Create CPUModel
-    }
-
-    public void LoadMoves(List<MoveSO> moves)
-    {
-        Moves = new Dictionary<Move, MoveSO>();
-        foreach (MoveSO move in moves)
-        {
-            Moves.Add(move.Move, move);
-        }
-    }
-
-    public MoveSO GetMoveSO(Move move)
-    {
-        if (Moves.TryGetValue(move, out var moveSO))
-        {
-            return moveSO;
-        }
-        else
-        {
-            GameManager.Instance.LogError("Could not fin move {move} in dictionary");
-            return null;
-        }
-    }
-
-    public List<MoveSO> GetAllMoves()
-    {
-        return Moves.Values.ToList();
-    }
-
-    public void AddPlayer(string name)
-    {
-        Players.Add(new PlayerModel() { Name = name });
-    }
-
-    public void StartMatch()
-    {
-        Rounds.Clear();
+        this.players = players;
+        this.moves = moves; 
+        this.requiredWins = requiredWins;
+        this.maxRounds = (requiredWins - 1) * 2 + 1;
+        this.AIModel = aiModel;
     }
 
     public void AddRound(Move playerMove)
     {
+        int cpuPointsAhead = players[1].Wins - players[0].Wins;
+
         var round = new RoundModel();
         round.PlayerMove = playerMove;
-        round.Player2Move = GetCPUMove();
-        round.Calculate(Moves);
+        round.Player2Move = AIModel.MakeMove(playerMove, cpuPointsAhead);
+        round.Calculate(moves);
 
         if (round.Result == Result.Win)
         {
-            Players[0].Wins++;
+            players[0].Wins++;
         }
         else if (round.Result == Result.Lose)
         {
-            Players[1].Wins++;
+            players[1].Wins++;
         }
 
-        Rounds.Add(round);
-    }
+        rounds.Add(round);
 
-    private Move GetCPUMove()
-    {
-        return Move.Rock;
+        if (MatchEnded())
+        {
+            HistoryManager.SaveMatchHistory(requiredWins, MatchResult().ToString());
+        }
     }
 
     public RoundModel GetLastRound()
     {
-        return Rounds[Rounds.Count - 1];
+        return rounds[rounds.Count - 1];
     }
 
     public Result MatchResult()
     {
-        return Players[0].Wins == RequiredWins ? Result.Win : Result.Lose;
+        return players[0].Wins == requiredWins ? Result.Win : Result.Lose;
     }
 
     public bool MatchEnded()
     {
-        foreach (var player in Players)
+        foreach (var player in players)
         {
-            if (player.Wins == RequiredWins)
+            if (player.Wins == requiredWins)
             {
                 return true;
             }

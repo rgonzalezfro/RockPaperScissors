@@ -29,16 +29,8 @@ public class MoveSelectionPanel : UIPanel
     {
         infoContainer.SetActive(false);
 
-        ClearChildren(ButtonsContainer);
+        GameManager.Instance.ClearChildren(ButtonsContainer);
         CreateButtons(moves);
-    }
-
-    private void ClearChildren(Transform container)
-    {
-        for (int i = 0; i < container.childCount; i++)
-        {
-            Destroy(container.GetChild(i).gameObject);
-        }
     }
 
     private void CreateButtons(List<MoveSO> moves)
@@ -63,9 +55,8 @@ public class MoveSelectionPanel : UIPanel
 
     public void ShowWinLoseDetails(MoveSO selected, List<MoveSO> win, List<MoveSO> lose)
     {
-
-        ClearChildren(winContainer);
-        ClearChildren(loseContainer);
+        GameManager.Instance.ClearChildren(winContainer);
+        GameManager.Instance.ClearChildren(loseContainer);
 
         moveItemSelected.Setup(selected.Move, selected.Image);
 

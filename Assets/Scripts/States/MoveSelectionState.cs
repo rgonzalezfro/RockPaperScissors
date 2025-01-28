@@ -9,7 +9,7 @@ public class MoveSelectionState : State
     public override void EnterState()
     {
         panel = UIManager.Instance.ShowPanel<MoveSelectionPanel>();
-        panel.Setup(GameManager.Instance.Model.GetAllMoves());
+        panel.Setup(Model.Instance.GetAllMoves());
         panel.OnSelectMove += SelectMove;
         panel.OnConfirmMove += ConfirmMove;
     }
@@ -17,26 +17,26 @@ public class MoveSelectionState : State
     private void SelectMove(Move move)
     {
         selectedMove = move;
-        var model = GameManager.Instance.Model;
+        var model = Model.Instance;
         
-        var selected = model.GetMoveSO(move);
+        var selected = model.GetMove(move);
         var win = new List<MoveSO>();
         var lose = new List<MoveSO>();
 
         foreach (var item in selected.Win)
         {
-            win.Add(model.GetMoveSO(item));
+            win.Add(model.GetMove(item));
         }
         foreach (var item in selected.Lose)
         {
-            lose.Add(model.GetMoveSO(item));
+            lose.Add(model.GetMove(item));
         }
         panel.ShowWinLoseDetails(selected, win, lose);
     }
 
     private void ConfirmMove()
     {
-        GameManager.Instance.Model.AddRound(selectedMove);
+        Model.Instance.Match.AddRound(selectedMove);
         GameManager.Instance.ChangeState(new MoveRevealState());
     }
 

@@ -11,6 +11,7 @@ public class MatchFinishPanel : UIPanel
     const string LOSE_TXT = "Better luck next time. You lost the match";
 
     public event Action OnRestart;
+    public event Action OnExit;
 
     public void Setup(Result result)
     {
@@ -27,5 +28,10 @@ public class MatchFinishPanel : UIPanel
     public void Restart()
     {
         OnRestart?.Invoke();
+    }
+
+    public void ExitMatch()
+    {
+        OnExit?.Invoke();
     }
 }
