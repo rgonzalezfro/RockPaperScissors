@@ -18,5 +18,6 @@
     {
         panel.OnRestart -= RestartGame;
         UIManager.Instance.HidePanel<MatchFinishPanel>();
+        UIManager.Instance.HidePanel<RoundCounterPanel>();
     }
 }
