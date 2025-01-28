@@ -14,6 +14,11 @@ public class HistoryManager
     {
         var entry = new MatchHistoryEntry(rounds, result);
 
+        if (history == null)
+        {
+            history = new List<MatchHistoryEntry>();
+        }
+
         history.Add(entry);
 
         try
