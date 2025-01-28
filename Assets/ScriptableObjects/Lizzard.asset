@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d872eb9ba29761d41b0b2b41260a7218, type: 3}
-  m_Name: Scissors
+  m_Name: Lizzard
   m_EditorClassIdentifier: 
-  Move: 2
-  Image: {fileID: 7766721758921934520, guid: 8461166ad668506449ed55109012d8e2, type: 3}
-  Lose: 0000000004000000
-  Win: 0100000003000000
+  Move: 3
+  Image: {fileID: 4704224431291671930, guid: 31c8dce9a9847114f836193c78f920e9, type: 3}
+  Lose: 0000000002000000
+  Win: 0400000001000000

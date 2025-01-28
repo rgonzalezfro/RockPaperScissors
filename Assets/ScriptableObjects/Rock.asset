@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Rock
   m_EditorClassIdentifier: 
   Move: 0
-  Lose: 01000000
-  Win: 02000000
+  Image: {fileID: -2182124076254010665, guid: 76306de0e72b4624cbf8ad67855eb421, type: 3}
+  Lose: 0100000004000000
+  Win: 0200000003000000

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Paper
   m_EditorClassIdentifier: 
   Move: 1
-  Lose: 02000000
-  Win: 00000000
+  Image: {fileID: -1469909079130451432, guid: 3e72c75ae5e745e4b884550d6ff57666, type: 3}
+  Lose: 0200000003000000
+  Win: 0000000004000000

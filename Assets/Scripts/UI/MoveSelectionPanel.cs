@@ -7,23 +7,37 @@ using UnityEngine.UI;
 public class MoveSelectionPanel : UIPanel
 {
     [SerializeField]
-    public GameObject ButtonPrefab;
+    private GameObject infoContainer;
     [SerializeField]
-    public Transform ButtonsContainer;
+    private Transform winContainer;
+    [SerializeField]
+    private Transform loseContainer;
+    [SerializeField]
+    private MoveItem moveItemPrefab;
+    [SerializeField]
+    private MoveItem moveItemSelected;
+
+    [SerializeField]
+    private GameObject ButtonPrefab;
+    [SerializeField]
+    private Transform ButtonsContainer;
 
     public event Action<Move> OnSelectMove;
+    public event Action OnConfirmMove;
 
     public void Setup(List<MoveSO> moves)
     {
-        ClearButtons();
+        infoContainer.SetActive(false);
+
+        ClearChildren(ButtonsContainer);
         CreateButtons(moves);
     }
 
-    private void ClearButtons()
+    private void ClearChildren(Transform container)
     {
-        for (int i = 0; i < ButtonsContainer.childCount; i++)
+        for (int i = 0; i < container.childCount; i++)
         {
-            Destroy(ButtonsContainer.GetChild(i).gameObject);
+            Destroy(container.GetChild(i).gameObject);
         }
     }
 
@@ -40,5 +54,32 @@ public class MoveSelectionPanel : UIPanel
     public void SelectMove(Move move)
     {
         OnSelectMove?.Invoke(move);
+    }
+
+    public void ConfirmMove()
+    {
+        OnConfirmMove?.Invoke();
+    }
+
+    public void ShowWinLoseDetails(MoveSO selected, List<MoveSO> win, List<MoveSO> lose)
+    {
+
+        ClearChildren(winContainer);
+        ClearChildren(loseContainer);
+
+        moveItemSelected.Setup(selected.Move, selected.Image);
+
+        foreach (MoveSO move in win)
+        {
+            var item = Instantiate(moveItemPrefab, winContainer);
+            item.Setup(move.Move, move.Image);
+        }
+        foreach (MoveSO move in lose)
+        {
+            var item = Instantiate(moveItemPrefab, loseContainer);
+            item.Setup(move.Move, move.Image);
+        }
+
+        infoContainer.SetActive(true);
     }
 }

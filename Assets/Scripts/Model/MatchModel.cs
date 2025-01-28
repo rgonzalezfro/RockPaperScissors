@@ -1,16 +1,44 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public class MatchModel
 {
     public int RequiredWins = 3;
 
-    public List<MoveSO> Moves;
+    public Dictionary<Move, MoveSO> Moves;
     public List<PlayerModel> Players = new List<PlayerModel>();
     private List<RoundModel> Rounds = new List<RoundModel>();
 
     public MatchModel()
     {
         //Create CPUModel
+    }
+
+    public void LoadMoves(List<MoveSO> moves)
+    {
+        Moves = new Dictionary<Move, MoveSO>();
+        foreach (MoveSO move in moves)
+        {
+            Moves.Add(move.Move, move);
+        }
+    }
+
+    public MoveSO GetMoveSO(Move move)
+    {
+        if (Moves.TryGetValue(move, out var moveSO))
+        {
+            return moveSO;
+        }
+        else
+        {
+            GameManager.Instance.LogError("Could not fin move {move} in dictionary");
+            return null;
+        }
+    }
+
+    public List<MoveSO> GetAllMoves()
+    {
+        return Moves.Values.ToList();
     }
 
     public void AddPlayer(string name)
@@ -47,9 +75,9 @@ public class MatchModel
         return Move.Rock;
     }
 
-    public Result LastRoundResult()
+    public RoundModel GetLastRound()
     {
-        return Rounds[Rounds.Count - 1].Result;
+        return Rounds[Rounds.Count - 1];
     }
 
     public Result MatchResult()

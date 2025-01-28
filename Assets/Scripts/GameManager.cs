@@ -3,14 +3,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region Singleton
+
     public static GameManager Instance { get; private set; }
-
-    public MatchModel Model;
-
-    [SerializeField]
-    private List<MoveSO> Moves;
-
-    private State currentState;
 
     private void Awake()
     {
@@ -23,6 +18,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    #endregion
+
+    #region State Manager (move to other class for Single responsibility)
+
+    private State currentState;
 
     public void ChangeState(State newState)
     {
@@ -31,16 +31,34 @@ public class GameManager : MonoBehaviour
         currentState.EnterState();
     }
 
-    private void Start()
-    {
-        Model = new MatchModel();
-        Model.Moves = Moves;
+    #endregion
 
-        ChangeState(new MainMenuState());
-    }
+    #region Logs utility
 
     public void Log(string log)
     {
         Debug.Log(log);
+    }
+
+    public void LogError(string log)
+    {
+        Debug.LogError(log);
+    }
+
+    #endregion
+
+    public MatchModel Model;
+
+    //Add settings as scriptable objects
+
+    [SerializeField]
+    private List<MoveSO> Moves;
+
+    private void Start()
+    {
+        Model = new MatchModel();
+        Model.LoadMoves(Moves);
+
+        ChangeState(new MainMenuState());
     }
 }

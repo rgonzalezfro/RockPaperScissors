@@ -6,8 +6,12 @@
     public override void EnterState()
     {
         var model = GameManager.Instance.Model;
+        var lastRound = model.GetLastRound();
+        var p1selection = model.GetMoveSO(lastRound.PlayerMove);
+        var p2selection = model.GetMoveSO(lastRound.Player2Move);
+
         panel = UIManager.Instance.ShowPanel<MoveRevealPanel>();
-        panel.SetUp(model.Players[0].Name,model.Players[1].Name, model.LastRoundResult());
+        panel.SetUp(model.Players[0].Name,model.Players[1].Name, lastRound.Result, p1selection, p2selection);
         panel.StartCountdown(countdownTime);
         panel.OnRevealed += UpdateCounter;
         panel.OnContinue += EndRound;
