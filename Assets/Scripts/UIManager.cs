@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public UIManager Instance { get; private set; }
+    public static UIManager Instance { get; private set; }
 
     private Dictionary<Type, UIPanel> panels = new Dictionary<Type, UIPanel>();
 

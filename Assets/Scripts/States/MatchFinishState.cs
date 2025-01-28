@@ -1,13 +1,22 @@
 ﻿public class MatchFinishState : State
 {
+    MatchFinishPanel panel;
+
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        panel = UIManager.Instance.ShowPanel<MatchFinishPanel>();
+        panel.Setup(GameManager.Instance.Model.MatchResult());
+        panel.OnRestart += RestartGame;
+    }
+
+    private void RestartGame()
+    {
+        GameManager.Instance.ChangeState(new MatchStartState());
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        panel.OnRestart -= RestartGame;
+        UIManager.Instance.HidePanel<MatchFinishPanel>();
     }
-
 }
