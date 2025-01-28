@@ -3070,6 +3070,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: adb0cf2ee7b4f5c4a84ea3544a5c94ce, type: 2}
   - {fileID: 11400000, guid: d1684d630a121fb40bad3a87bae998fb, type: 2}
   - {fileID: 11400000, guid: f13ec9471059f3a458ff3fd525b7d100, type: 2}
+  aiSettings: {fileID: 11400000, guid: 89efc29333bf38a4f817d137506d592a, type: 2}
   requiredWins: 3
 --- !u!1 &858883899
 GameObject:

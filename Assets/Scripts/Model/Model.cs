@@ -24,7 +24,7 @@ public class Model : MonoBehaviour
     private List<MoveSO> moves;
 
     [SerializeField]
-    private List<RubberBandRule> rules;
+    private AISettingsSO aiSettings;
 
     [SerializeField]
     private int requiredWins;
@@ -92,7 +92,7 @@ public class Model : MonoBehaviour
 
     public void StartMatch()
     {
-        var aiModel = new AIModel(movesDict, rules);
+        var aiModel = new AIModel(movesDict, aiSettings.Rules);
         match = new MatchModel(players, movesDict, requiredWins, aiModel);
     }
 
